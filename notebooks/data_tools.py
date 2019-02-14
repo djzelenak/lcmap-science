@@ -243,3 +243,55 @@ def mask(df, vals=mask_values, mask_field='qa', **kwargs):
 
     """
     return df[~df[mask_field].isin(np.array(vals))].reset_index(drop=True)
+
+
+def nearest_date(array, date):
+    """
+    Find the index value in the array to the nearest matching date, date may therefore not be a value
+    within the array
+
+    Args:
+        array (array_like): The input data
+        date (Tuple[int, int, int]): The date to look for given as (Year, Month, M-day)
+
+    Returns:
+        int
+
+    """
+    date = dt.datetime(*date).toordinal()
+
+    array = np.asarray(array)
+
+    return (np.abs(array - date)).argmin()
+
+
+def spectral_signature(df, date):
+    """
+
+    Args:
+        df:
+        date:
+
+    Returns:
+
+    """
+    index = nearest_date(df.dates.apply(lambda x: x.toordinal()), date)
+
+    return df.iloc[index]
+
+
+def load_csv(csv_file, dates_field='dates', use_datetime=True):
+    """
+
+    Args:
+        csv_file (str): The full path to the input csv file
+        dates_field (str): The name of the dates column
+        use_datetime (bool): Whether or not to use datetime format
+
+    Returns:
+        pd.DataFrame
+
+    """
+    return pd.read_csv(csv_file,
+                       parse_dates=[dates_field],
+                       infer_datetime_format=use_datetime).drop(columns='Unnamed: 0')
