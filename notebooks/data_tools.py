@@ -280,6 +280,22 @@ def spectral_signature(df, date):
     return df.iloc[index]
 
 
+def plot_spectral(series):
+    """
+
+    Args:
+        series:
+
+    Returns:
+
+    """
+    keys = ['blues', 'greens', 'reds', 'nirs', 'swir1s', 'swir2s']
+
+    vals = [series[key] for key in keys]
+
+    return keys, vals
+
+
 def load_csv(csv_file, dates_field='dates', use_datetime=True):
     """
 
